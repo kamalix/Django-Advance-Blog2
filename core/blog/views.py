@@ -2,7 +2,7 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views.generic.base import TemplateView,RedirectView
-from django.views.generic.list import ListView
+from django.views.generic import ListView,DetailView
 from .models import Post
 
 
@@ -43,12 +43,12 @@ class RedirectToMaktab(RedirectView):
         print(post)
         return super().get_redirect_url(*args, **kwargs)
 
-class PostList(ListView):
+class PostListView(ListView):
     #queryset = Post.objects.all()
     
     model = Post
     context_object_name = 'posts'
-    paginate_by = 2
+    paginate_by = 3
     ordering = 'id'
 
     # def get_queryset(self):
@@ -56,7 +56,9 @@ class PostList(ListView):
     #     return posts
     
 
-
+class PostDetailView(DetailView):
+    model = Post
+    
 
 
 
