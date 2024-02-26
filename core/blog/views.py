@@ -7,7 +7,7 @@ from django.views.generic.base import TemplateView,RedirectView
 from django.views.generic import ListView,DetailView,FormView,CreateView,UpdateView,DeleteView
 from .models import Post
 from .forms import PostForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 
 
 # Create your views here.
@@ -48,7 +48,8 @@ class RedirectToMaktab(RedirectView):
         return super().get_redirect_url(*args, **kwargs)
 '''
 
-class PostListView(ListView):
+class PostListView(PermissionRequiredMixin,LoginRequiredMixin,ListView):
+    permission_required = 'blog.view_post'
     #queryset = Post.objects.all()
     
     model = Post
