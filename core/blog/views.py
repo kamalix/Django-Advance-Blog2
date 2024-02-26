@@ -7,6 +7,7 @@ from django.views.generic.base import TemplateView,RedirectView
 from django.views.generic import ListView,DetailView,FormView,CreateView,UpdateView,DeleteView
 from .models import Post
 from .forms import PostForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
@@ -38,13 +39,14 @@ def RedirectToMaktab(request):
     return redirect("https://www.maktabkhooneh.com")
 '''
 
-
+'''
 class RedirectToMaktab(RedirectView):
     url = 'https://www.maktabkhooneh.com'
     def get_redirect_url(self, *args, **kwargs):
         post = get_object_or_404(Post, pk=kwargs['pk'])
         print(post)
         return super().get_redirect_url(*args, **kwargs)
+'''
 
 class PostListView(ListView):
     #queryset = Post.objects.all()
@@ -59,7 +61,7 @@ class PostListView(ListView):
     #     return posts
     
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin,DetailView):
     model = Post
 
 '''
@@ -74,7 +76,7 @@ class PostCreateView(FormView):
 
 '''
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
     #fields = ['author','title','content','status','category','published_date']
     form_class = PostForm
@@ -85,12 +87,12 @@ class PostCreateView(CreateView):
         return super().form_valid(form)
 
 
-class PostEditView(UpdateView):
+class PostEditView(LoginRequiredMixin,UpdateView):
     model = Post
     form_class = PostForm
     success_url = '/blog/post/'
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin,DeleteView):
     model = Post
     success_url = '/blog/post/'
 
